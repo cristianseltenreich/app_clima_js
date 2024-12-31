@@ -21,6 +21,12 @@ body {
   
   h1 {
     color: #d5f2fb;
+    font-size: 24px;
+  }
+
+  h2 {
+    color: #d5f2fb;
+    font-size: 20px;
   }
   
   input[type="text"] {
@@ -31,11 +37,13 @@ body {
   
   button {
     padding: 10px 20px;
+    margin-top: 1em;
     font-size: 16px;
     background-color: #8393ee;
     color: #ffffff;
     border: none;
     cursor: pointer;
+    text-align: center;
   }
   
   #datosClima {

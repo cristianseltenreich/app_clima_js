@@ -10,15 +10,17 @@ let difKelvin = -273.15;
 document.getElementById("botonBusqueda").addEventListener("click", () => {
     let ciudad = document.getElementById("ciudadEntrada").value;
     //console.log(ciudad);
-    if (ciudad){
-        fetchDatosClima(ciudad);        
-    }    
+    if (ciudad) {
+        fetchDatosClima(ciudad);
+    }
 });
 
-function englishToSpanish(descripcion){
-    switch (descripcion){
+function englishToSpanish(descripcion) {
+    switch (descripcion) {
         case "clear sky":
             return "cielo despejado";
+        case "overcast clouds":
+            return "nublado";
         case "few clouds":
             return "pocas nubes";
         case "scattered clouds":
@@ -58,35 +60,35 @@ function englishToSpanish(descripcion){
     }
 }
 
-function fetchDatosClima(ciudad){
+function fetchDatosClima(ciudad) {
     fetch(`${urlBase}?q=${ciudad}&appid=${api_key}`)
         .then(data => data.json())
-        .then(data => {mostrarDatosClima(data)});        
+        .then(data => { mostrarDatosClima(data) });
 }
 
-function direccionVientoACardinal(direccion){
-    if (direccion > 337.5 || direccion <= 22.5){
+function direccionVientoACardinal(direccion) {
+    if (direccion > 337.5 || direccion <= 22.5) {
         return "Norte";
-    } else if (direccion > 22.5 && direccion <= 67.5){
+    } else if (direccion > 22.5 && direccion <= 67.5) {
         return "Noreste";
-    } else if (direccion > 67.5 && direccion <= 112.5){
+    } else if (direccion > 67.5 && direccion <= 112.5) {
         return "Este";
-    } else if (direccion > 112.5 && direccion <= 157.5){
+    } else if (direccion > 112.5 && direccion <= 157.5) {
         return "Sureste";
-    } else if (direccion > 157.5 && direccion <= 202.5){
+    } else if (direccion > 157.5 && direccion <= 202.5) {
         return "Sur";
-    } else if (direccion > 202.5 && direccion <= 247.5){
+    } else if (direccion > 202.5 && direccion <= 247.5) {
         return "Suroeste";
-    } else if (direccion > 247.5 && direccion <= 292.5){
+    } else if (direccion > 247.5 && direccion <= 292.5) {
         return "Oeste";
-    } else if (direccion > 292.5 && direccion <= 337.5){
+    } else if (direccion > 292.5 && direccion <= 337.5) {
         return "Noroeste";
     }
 }
 
 let metroSegundoAKmHora = (velocidad) => velocidad * 3.6;
 
-function mostrarDatosClima(data){
+function mostrarDatosClima(data) {
     console.log(data);
     const divDatosClima = document.getElementById("datosClima");
     divDatosClima.innerHTML = "";//limpio el div
@@ -97,11 +99,12 @@ function mostrarDatosClima(data){
     let humedad = data.main.humidity;
     let viento = data.wind.speed;
     let direccionViento = data.wind.deg;
-    let descripcion = data.weather[0].description; 
+    let descripcion = data.weather[0].description;
+    let icon = data.weather[0].icon;
 
     descripcion = englishToSpanish(descripcion);
 
-    
+
 
     let direccionVientoCardinal = direccionVientoACardinal(direccionViento);
     let vientoKmHora = metroSegundoAKmHora(viento);
@@ -109,6 +112,10 @@ function mostrarDatosClima(data){
     let ciudadTitulo = document.createElement("h2");
     ciudadTitulo.textContent = `${nombreCiudad} - ${pais}`;
     divDatosClima.appendChild(ciudadTitulo);
+
+    let imgClima = document.createElement("img");
+    imgClima.src = `http://openweathermap.org/img/w/${icon}.png`;
+    divDatosClima.appendChild(imgClima);
 
     let temperaturaParrafo = document.createElement("p");
     temperaturaParrafo.textContent = `Temperatura: ${temperatura.toFixed(2)}°C`;
@@ -124,6 +131,6 @@ function mostrarDatosClima(data){
 
     let descripcionParrafo = document.createElement("p");
     descripcionParrafo.textContent = `Descripción meteorológica: ${descripcion}`;
-    divDatosClima.appendChild(descripcionParrafo);
-}   
+    divDatosClima.appendChild(descripcionParrafo);    
+}
 
